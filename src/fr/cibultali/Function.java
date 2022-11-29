@@ -40,8 +40,8 @@ public abstract class Function {
      */
     public double eval(){
         double derivative = 0;
-        for (double i = min; i < max; i+= delta) {
-            derivative += delta * f(i);
+        for (double i = min; i <= max; i+= delta) {
+            derivative += delta * (0.5*(f(i) + f(i+delta)));
         }
         return derivative;
     }

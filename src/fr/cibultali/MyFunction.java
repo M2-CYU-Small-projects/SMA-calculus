@@ -15,8 +15,8 @@ public class MyFunction extends Function{
     }
 
     public static void main(String[] args) {
-        Function inverted = new MyFunction(1, 2, 0.25);
-        System.out.println(inverted.f(3));
+        Function inverted = new MyFunction(1, 2, 0.0000001);
+        System.out.println(inverted.f(2));
         System.out.println(inverted.eval());
     }
 }
