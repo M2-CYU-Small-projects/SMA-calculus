@@ -13,4 +13,11 @@ public class MyFunction extends Function{
     public double f(double x) {
         return 1/x;
     }
+
+    public static void main(String[] args) {
+        Function inverted = new MyFunction(1, 2, 0.25);
+        System.out.println(inverted.f(3));
+        System.out.println(inverted.eval());
+    }
 }
+
