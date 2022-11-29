@@ -2,6 +2,7 @@ package fr.cibultali;
 
 
 import jade.core.Agent;
+import jade.core.ServiceDescriptor;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
@@ -12,25 +13,33 @@ import jade.domain.FIPAException;
  */
 public class ComputeAgent extends Agent {
 
-    protected Function function;
+    private static final String SERVICE_TYPE = "COMPUTE";
 
-    public ComputeAgent(Function function) {
-        this.function = function;
-    }
+    protected Function function;
 
     @Override
     protected void setup() {
+        registerAsService();
 
-        /**
-         * On va se réserver un service
-         */
-
-        super.setup();
     }
 
     @Override
     protected void takeDown() {
-        super.takeDown();
+        // Deregister from the yellow pages
+        System.out.println(String.format("Deregister \"%s\" as service of type \"%s\"", getLocalName(), SERVICE_TYPE));
+        try{
+            DFService.deregister(this);
+        } catch (FIPAException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void registerAsService() {
+        System.out.println(String.format("Register \"%s\" as service of type \"%s\"", getLocalName(), SERVICE_TYPE));
+        ServiceDescription serviceDescription = new ServiceDescription();
+        serviceDescription.setType(SERVICE_TYPE);
+        serviceDescription.setName(getLocalName());
+        register(serviceDescription);
     }
 
     private void register(ServiceDescription serviceDescription) {
