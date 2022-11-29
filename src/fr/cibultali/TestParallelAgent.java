@@ -41,7 +41,7 @@ public class TestParallelAgent extends Agent {
                 min = parseDoubleOrElse(arguments[0].toString(), 0.0);
             }
             if (arguments.length > 2) {
-                max = parseDoubleOrElse(arguments[1].toString(), 1.0)
+                max = parseDoubleOrElse(arguments[1].toString(), 1.0);
             }
         }
 
