@@ -21,6 +21,7 @@ public class ComputeAgent extends Agent {
     protected void setup() {
         registerAsService();
 
+        // TODO add behavior for receiving the message etc.
     }
 
     @Override

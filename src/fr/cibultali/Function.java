@@ -35,15 +35,30 @@ public abstract class Function {
     public abstract double f(double x);
 
     /**
-     * Calculate derivative of the function
-     * @return
+     * Calculate integral of the function
+     * @return the integral of the function between min and max
      */
     public double eval(){
+        return eval(min, max);
+    }
+
+    /**
+     * Calculate derivative of the function in the provided range
+     *
+     * @param lowerBound the lower bound
+     * @param upperBound the upper bound
+     * @throws IllegalArgumentException if range provided is outside than the
+     * original range of the function
+     * @return the integral of the function in the provided range
+     */
+    public double eval(double lowerBound, double upperBound) {
+        if (min > lowerBound || max < upperBound) {
+            throw new IllegalArgumentException("Range provided is outside the original function range");
+        }
         double derivative = 0;
-        for (double i = min; i <= max; i+= delta) {
+        for (double i = lowerBound; i <= upperBound; i+= delta) {
             derivative += delta * (0.5*(f(i) + f(i+delta)));
         }
         return derivative;
     }
-
 }

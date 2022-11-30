@@ -24,6 +24,8 @@ public class ComputeCreatorAgent extends Agent {
     protected void setup() {
         int nbAgents = getAgentCount();
         createAgents(nbAgents);
+        // Don't need the agent anymore
+        doDelete();
     }
 
     private int getAgentCount() {
