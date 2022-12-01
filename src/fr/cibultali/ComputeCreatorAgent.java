@@ -2,6 +2,7 @@ package fr.cibultali;
 
 import jade.core.Agent;
 import jade.wrapper.AgentContainer;
+import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 
 import java.util.Optional;
@@ -55,10 +56,12 @@ public class ComputeCreatorAgent extends Agent {
         for (int i = 0; i < count; i++) {
             String name = "compute_" + generationId + "_" + (1 + i);
             try {
-                container.createNewAgent(name,
-                                         "fr.cibultali.ComputeAgent",
-                                         null
+                AgentController agentController = container.createNewAgent(
+                        name,
+                        "fr.cibultali.ComputeAgent",
+                        null
                 );
+                agentController.start();
             } catch (StaleProxyException e) {
                 e.printStackTrace();
                 throw new RuntimeException(e);

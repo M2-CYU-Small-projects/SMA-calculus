@@ -3,7 +3,6 @@ package fr.cibultali;
 
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -60,10 +59,12 @@ public class TestParallelAgent extends Agent {
         List<Range> splits = originalRange.split(computeAgents.size());
 
         // Do the computation locally first
+        System.out.println("==== START LOCAL COMPUTATION ====");
         computeLocally(function, splits);
 
         // Then we can start the distributed process
         // The time starts here (the sending can cause time losses !)
+        System.out.println("==== START DISTRIBUTED COMPUTATION ====");
         long startTime = System.nanoTime();
         sendComputeMessages(agentArguments, computeAgents, splits);
 
@@ -254,7 +255,7 @@ public class TestParallelAgent extends Agent {
             this.min = min;
             this.max = max;
             if (min > max) {
-                throw new RuntimeException(String.format("Min (%d) is greater than max (%d)", min, max));
+                throw new RuntimeException(String.format("Min (%f) is greater than max (%f)", min, max));
             }
         }
 
