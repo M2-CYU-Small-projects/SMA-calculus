@@ -10,7 +10,7 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 
 /**
- * @author Aldric Vitali Silvestre
+ * @author Nicolas CIBULKA
  */
 public class ComputeAgent extends Agent {
 

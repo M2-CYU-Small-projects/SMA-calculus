@@ -7,6 +7,7 @@ import jade.wrapper.StaleProxyException;
 
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 /**
  * A special agent useful for easily creating multiple {@link ComputeAgent}.
@@ -58,7 +59,7 @@ public class ComputeCreatorAgent extends Agent {
             try {
                 AgentController agentController = container.createNewAgent(
                         name,
-                        "fr.cibultali.ComputeAgent",
+                        ComputeAgent.class.getCanonicalName(),
                         null
                 );
                 agentController.start();

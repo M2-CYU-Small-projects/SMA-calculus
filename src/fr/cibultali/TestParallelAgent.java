@@ -21,19 +21,8 @@ import java.util.stream.Collectors;
  */
 public class TestParallelAgent extends Agent {
 
-    protected double total;
-
-    protected long timestamp;
-
     @Override
     protected void setup() {
-        /**
-         * On attend 4 arguments :
-         *  - La borne min
-         *  - La borne max
-         *  - Le delta
-         *  - Le nom de la fonction
-         */
         AgentArguments agentArguments = new AgentArguments(getArguments());
         Function function = agentArguments.createFunction();
 
@@ -82,12 +71,6 @@ public class TestParallelAgent extends Agent {
                     resultCountReceived++;
                     double value = parseResponse(message.getContent());
                     currentSum += value;
-                    // if all messages are received, print the result
-                    if (done()) {
-                        long end = System.nanoTime();
-                        System.out.println("Integral by distributed ComputeAgents = " + currentSum);
-                        System.out.println("Time for computation: " + computeElapsedTimeMs(startTime, end) + " milliseconds");
-                    }
                 }
                 block();
             }
@@ -101,6 +84,15 @@ public class TestParallelAgent extends Agent {
             public boolean done() {
                 // Done when all messages are received
                 return resultCountReceived >= computeAgents.size();
+            }
+
+            @Override
+            public int onEnd() {
+                // All messages are received, print the result
+                long end = System.nanoTime();
+                System.out.println("Integral by distributed ComputeAgents = " + currentSum);
+                System.out.println("Time for computation: " + computeElapsedTimeMs(startTime, end) + " milliseconds");
+                return 0;
             }
         });
     }
@@ -190,7 +182,7 @@ public class TestParallelAgent extends Agent {
      * <p>
      * Also handles the default argument values
      */
-    private class AgentArguments {
+    private static class AgentArguments {
         double min = 1.0;
         double max = min + 1;
         double delta = 0.001;
@@ -213,20 +205,20 @@ public class TestParallelAgent extends Agent {
             if (arguments == null) {
                 return;
             }
-            if (arguments.length > 1) {
+            if (arguments.length >= 1) {
                 min = parseDoubleOrElse(arguments[0].toString(), 0.0);
             }
-            if (arguments.length > 2) {
+            if (arguments.length >= 2) {
                 max = parseDoubleOrElse(arguments[1].toString(), min + 1);
                 if (max < min) {
                     System.err.println("Cannot have min lower than max. Set max to " + (min + 1.0));
                     max = min + 1.0;
                 }
             }
-            if (arguments.length > 3) {
+            if (arguments.length >= 3) {
                 delta = parseDoubleOrElse(arguments[2].toString(), 0.001);
             }
-            if (arguments.length > 4) {
+            if (arguments.length >= 4) {
                 functionName = arguments[3].toString();
             }
         }
@@ -247,9 +239,9 @@ public class TestParallelAgent extends Agent {
      * <p>
      * A range object is immutable: each operation will create a new range.
      */
-    private class Range {
-        private double min;
-        private double max;
+    private static class Range {
+        private final double min;
+        private final double max;
 
         public Range(double min, double max) {
             this.min = min;
@@ -286,8 +278,7 @@ public class TestParallelAgent extends Agent {
             // Create the last range after for avoiding float imprecision.
             // The last range may not have the same size as the other ones
             double lastMin = splits.get(splits.size() - 1).getMax();
-            double lastMax = max;
-            splits.add(new Range(lastMin, lastMax));
+            splits.add(new Range(lastMin, max));
 
             return splits;
         }
