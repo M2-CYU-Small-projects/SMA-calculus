@@ -68,11 +68,13 @@ public class TestParallelAgent extends Agent {
             public void action() {
                 ACLMessage message = receive();
                 if (message != null) {
+                    System.out.println("--> Message received !");
                     resultCountReceived++;
                     double value = parseResponse(message.getContent());
                     currentSum += value;
+                } else{
+                    block();
                 }
-                block();
             }
 
             private double parseResponse(String responseContent) {

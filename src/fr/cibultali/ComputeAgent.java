@@ -38,8 +38,7 @@ public class ComputeAgent extends Agent {
                             agentArguments.max,
                             result
                     ));
-                }
-                block();
+                } else block();
             }
         });
     }
