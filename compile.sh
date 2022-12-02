@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# This script permits to compile the program. 
+# This creates an "out" folder where the .class files are stored
+# If needed, it is possible to add an argument to define where the 
+# "jade.jar" archive is stored.
+
 # Stop at first error
 set -e
 
@@ -21,9 +26,11 @@ mkdir -p $OUT_FOLDER
 
 JAVAC_COMMAND="javac --release 8 -cp $CP -d $OUT_FOLDER"
 
-$JAVAC_COMMAND $SRC_FOLDER/$PACKAGE_PATH/Function.java
-$JAVAC_COMMAND $SRC_FOLDER/$PACKAGE_PATH/MyFunction.java
-$JAVAC_COMMAND $SRC_FOLDER/$PACKAGE_PATH/FunctionFactory.java
-$JAVAC_COMMAND $SRC_FOLDER/$PACKAGE_PATH/ComputeAgent.java
-$JAVAC_COMMAND $SRC_FOLDER/$PACKAGE_PATH/ComputeCreatorAgent.java
-$JAVAC_COMMAND $SRC_FOLDER/$PACKAGE_PATH/TestParallelAgent.java
+$JAVAC_COMMAND $(find $SRC_FOLDER -name "*.java")
+
+# $JAVAC_COMMAND $SRC_FOLDER/$PACKAGE_PATH/Function.java
+# $JAVAC_COMMAND $SRC_FOLDER/$PACKAGE_PATH/MyFunction.java
+# $JAVAC_COMMAND $SRC_FOLDER/$PACKAGE_PATH/FunctionFactory.java
+# $JAVAC_COMMAND $SRC_FOLDER/$PACKAGE_PATH/ComputeAgent.java
+# $JAVAC_COMMAND $SRC_FOLDER/$PACKAGE_PATH/ComputeCreatorAgent.java
+# $JAVAC_COMMAND $SRC_FOLDER/$PACKAGE_PATH/TestParallelAgent.java
