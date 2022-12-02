@@ -1,0 +1,14 @@
+--> Run the process with 7 workers and the base function
+
+./run_cli.sh ../jade_lib/jade.jar \
+-agents 'creator:fr.cibultali.ComputeCreatorAgent(7);tpa:fr.cibultali.TestParallelAgent'
+
+--> Run the process with 10 workers and the base function on big range
+
+./run_cli.sh ../jade_lib/jade.jar \
+-agents 'creator:fr.cibultali.ComputeCreatorAgent(10);tpa:fr.cibultali.TestParallelAgent(1, 10000, 0.000001)'
+
+--> Run the process with 10 workers and the X^2 function on medium range
+
+./run_cli.sh ../jade_lib/jade.jar \
+-agents 'creator:fr.cibultali.ComputeCreatorAgent(10);tpa:fr.cibultali.TestParallelAgent(-100,100,0.0001,X^2)'

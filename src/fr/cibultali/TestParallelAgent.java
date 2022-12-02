@@ -23,6 +23,11 @@ public class TestParallelAgent extends Agent {
 
     @Override
     protected void setup() {
+
+        // Wait for compute agents to initiate and properly
+        // register to service. Mostly useful in CLI mode
+        doWait(1000);
+
         AgentArguments agentArguments = new AgentArguments(getArguments());
         Function function = agentArguments.createFunction();
 
@@ -68,7 +73,6 @@ public class TestParallelAgent extends Agent {
             public void action() {
                 ACLMessage message = receive();
                 if (message != null) {
-                    System.out.println("--> Message received !");
                     resultCountReceived++;
                     double value = parseResponse(message.getContent());
                     currentSum += value;

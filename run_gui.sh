@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# This script permits to compile the program. 
-# This creates an "out" folder where the .class files are stored
+# This script permits to launch the Jade GUI with all agents 
+# compiled in the "out" folder loaded.
 # If needed, it is possible to add an argument to define where the 
 # "jade.jar" archive is stored.
 
