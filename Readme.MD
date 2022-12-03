@@ -107,7 +107,54 @@ TODO parler des agents, params nécéssaires etc.
 
 # Example scenarios
 
-TODO mettre des exemples de trucs qui marchent, version CLI + GUI 
+You will find there an example for each way of launching the system. The example we will present here is to compute the 
+integral of the function 1/X between 1 and 10 with a delta of 0.0001 with 5 compute agents.
+
+## GUI scenario example
+
+First we need to launch the program in GUI version after executing the compilation script.
+
+```shell
+
+./run_gui.sh [/path/to/jade.jar]
+
+```
+We write the path to jade.jar if we did not add in the classpath previously.
+
+Then we can reach to the main container and add a new agent.
+
+First we will create an agent that will generate all the computeAgents we want. For this, we will write 
+this in the opened window :
+
+**Agent name :** agentCreation
+
+**Class Name :** fr.cibultali.ComputeCreatorAgent
+
+**Arguments :** 5
+
+Once it's done, we will have all the computeAgents created.
+
+We will now have to create the TestParallelAgent to compute the integral
+
+Create a new agent with this parameters
+
+**Agent name :** testParallelAgent
+
+**Class Name :** fr.cibultali.TestParallelAgent
+
+**Arguments :** 1,10,0.0001,1/X
+
+You will then have the resut and the elapsed time for the execution in local and with the computeAgents displayed in the terminal.
+
+## CLI scenario example
+
+To execute the example with the CLI command, we will have to use this command after compiling :
+
+```shell
+./run_cli.sh [/path/to/jade.jar] -agents 'creator:fr.cibultali.ComputeCreatorAgent(10);tpa:fr.cibultali.TestParallelAgent(1, 10000, 0.000001)'
+```
+We write the path to jade.jar if we did not add in the classpath previously.
+
 
 # Work repartition
 
