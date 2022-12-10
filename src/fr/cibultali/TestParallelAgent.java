@@ -216,16 +216,17 @@ public class TestParallelAgent extends Agent {
             }
             if (arguments.length >= 2) {
                 max = parseDoubleOrElse(arguments[1].toString(), min + 1);
-                if (max < min) {
-                    System.err.println("Cannot have min lower than max. Set max to " + (min + 1.0));
-                    max = min + 1.0;
-                }
             }
             if (arguments.length >= 3) {
                 delta = parseDoubleOrElse(arguments[2].toString(), 0.001);
             }
             if (arguments.length >= 4) {
                 functionName = arguments[3].toString();
+            }
+            // Check that max is still greater than min
+            if (max < min) {
+                System.err.println("Cannot have min lower than max. Set max to " + (min + 1.0));
+                max = min + 1.0;
             }
         }
 
