@@ -10,12 +10,24 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 
 /**
+ * This agent will directly register to the "compute service" and wait indefinitely
+ * for "compute requests" to do.
+ *
+ * For each request, the agent will create the function, compute the integral of it and
+ * return the result to the requester with a reply message.
+ *
  * @author Nicolas CIBULKA
  */
 public class ComputeAgent extends Agent {
 
+    /**
+     * The name of the service where all agents will subscribe
+     */
     private static final String SERVICE_TYPE = "COMPUTE";
 
+    /**
+     * The current function to compute
+     */
     protected Function function;
 
     @Override
@@ -100,6 +112,9 @@ public class ComputeAgent extends Agent {
         }
     }
 
+    /**
+     * Register to the "compute" service in order to be detected by requesters.
+     */
     private void registerAsService() {
         System.out.println(String.format("Register \"%s\" as service of type \"%s\"", getLocalName(), SERVICE_TYPE));
         ServiceDescription serviceDescription = new ServiceDescription();
@@ -108,6 +123,10 @@ public class ComputeAgent extends Agent {
         register(serviceDescription);
     }
 
+    /**
+     * A simple wrapper method for registering to a service
+     * @param serviceDescription the information of the service in which to subscribe
+     */
     private void register(ServiceDescription serviceDescription) {
         DFAgentDescription dfAgentDescription = new DFAgentDescription();
         dfAgentDescription.setName(getAID());
@@ -122,7 +141,7 @@ public class ComputeAgent extends Agent {
     }
 
     /**
-     * Handles the arguments of the agent.
+     * A simple data class representing the request message contents.
      * <p>
      * This agent does not have any default argument.
      */

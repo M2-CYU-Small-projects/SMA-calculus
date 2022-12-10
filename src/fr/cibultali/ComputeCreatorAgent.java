@@ -7,7 +7,6 @@ import jade.wrapper.StaleProxyException;
 
 import java.util.Optional;
 import java.util.Random;
-import java.util.stream.IntStream;
 
 /**
  * A special agent useful for easily creating multiple {@link ComputeAgent}.
@@ -30,6 +29,13 @@ public class ComputeCreatorAgent extends Agent {
         doDelete();
     }
 
+    /**
+     * Find the number of agents from the agent arguments.
+     * <p>
+     * We simply retrieve the first argument (if exists) and convert it to a number.
+     *
+     * @return the number of agents that can be read, or the default value.
+     */
     private int getAgentCount() {
         return Optional.ofNullable(getArguments())
                 .filter(args -> args.length > 0)
@@ -38,6 +44,12 @@ public class ComputeCreatorAgent extends Agent {
                 .orElse(DEFAULT_AGENT_COUNT);
     }
 
+    /**
+     * Convert a String to a number.
+     *
+     * @param val the string to convert
+     * @return an optional containing the number parsed, or an empty optional if any error happens.
+     */
     private Optional<Integer> parseNumber(String val) {
         try {
             return Optional.of(Integer.parseInt(val));

@@ -17,6 +17,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * This agent will start by parsing the agent arguments and converting them to a valid {@link Function} instance.
+ * <p>
+ * After creating the function, this agent will then search for all agents that are
+ * registered to the `COMPUTE` service. With {@code N} agents found, the TestParallelAgent will then split the function
+ * in {@code N} equal parts. The computation can now begin.
+ * <p>
+ * First, the agent compute locally the integral of each function part and display the sum of the results, along with
+ * the time taken to do so. Then, it sends one compute request message to each ComputeAgent found with a different part
+ * of the function to compute. It simply waits for each response to come in order to display the sum of each
+ * response as the "distributed" result.
+ *
  * @author Aldric Vitali Silvestre
  */
 public class TestParallelAgent extends Agent {
@@ -76,7 +87,7 @@ public class TestParallelAgent extends Agent {
                     resultCountReceived++;
                     double value = parseResponse(message.getContent());
                     currentSum += value;
-                } else{
+                } else {
                     block();
                 }
             }
@@ -106,6 +117,7 @@ public class TestParallelAgent extends Agent {
     /**
      * Search all agents that have subscribed (and are still subscribed hopefully)
      * to a particular service.
+     *
      * @return the agents AIDs.
      * An empty list will be returned if an error occurs
      */
@@ -116,15 +128,20 @@ public class TestParallelAgent extends Agent {
         template.addServices(serviceDescription);
         try {
             DFAgentDescription[] results = DFService.search(this, template);
-            return Arrays.stream(results)
-                    .map(DFAgentDescription::getName)
-                    .collect(Collectors.toList());
+            return Arrays.stream(results).map(DFAgentDescription::getName).collect(Collectors.toList());
         } catch (FIPAException e) {
             e.printStackTrace();
             return Collections.emptyList();
         }
     }
 
+    /**
+     * Perform the local computation of the function in the same conditions as in distributed mode
+     * (i.e, with sub parts of the function to integrate and sum)
+     *
+     * @param function the function to compute
+     * @param splits   the parts of the function to perform separately
+     */
     private void computeLocally(Function function, List<Range> splits) {
         long start = System.nanoTime();
         double result = splits.stream()
@@ -137,9 +154,10 @@ public class TestParallelAgent extends Agent {
 
     /**
      * Send a different compute task message to each compute agent
+     *
      * @param agentArguments the arguments received by the agent
-     * @param computeAgents the AIDs of all compute agents to send a message to
-     * @param splits The function bounds to send as input
+     * @param computeAgents  the AIDs of all compute agents to send a message to
+     * @param splits         The function bounds to send as input
      */
     private void sendComputeMessages(AgentArguments agentArguments, List<AID> computeAgents, List<Range> splits) {
         // Both lists must have the same size
@@ -160,23 +178,22 @@ public class TestParallelAgent extends Agent {
 
     /**
      * Generate a message content for a {@link ComputeAgent}
+     *
      * @param agentArguments the arguments received, contains function name and delta
-     * @param split the upper and lower bounds of the function
+     * @param split          the upper and lower bounds of the function
      * @return the string to send to an agent
      */
     private String generateMessageContent(AgentArguments agentArguments, Range split) {
         // The message is formatted like :
         // [FUNCTION_NAME],[LOWER_BOUND],[UPPER_BOUND],[DELTA]
-        return agentArguments.functionName + ","
-                + split.getMin() + ","
-                + split.getMax() + ","
-                + agentArguments.delta;
+        return agentArguments.functionName + "," + split.getMin() + "," + split.getMax() + "," + agentArguments.delta;
     }
 
     /**
      * Compute the elapsed time between two timestamps in nanoseconds
+     *
      * @param startTime the start timestamp in nanoseconds
-     * @param endTime the end timestamp in nanoseconds
+     * @param endTime   the end timestamp in nanoseconds
      * @return The difference between both time, converted to milliseconds
      */
     private double computeElapsedTimeMs(long startTime, long endTime) {
